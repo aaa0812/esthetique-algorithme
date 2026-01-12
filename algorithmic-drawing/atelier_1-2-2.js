@@ -7,7 +7,7 @@ function setup() {
 // position des points
 let offset = 0;
 //espace entre les points
-let gap = 0;
+let gap = 16;
 
 //variables pour mieux différencier les points au moment de la génération
 let xScale = 0.015;
