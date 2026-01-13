@@ -47,7 +47,7 @@ function draw() {
     //change la puissance des cases du tableau précédent pour changer les couleurs
     for (let j = 0; j < nbCols; j++) {
         for (let i = 0; i < nbRows; i++) {
-            if(currentCells[j][i]*0.99 > 0.8) {
+            if(currentCells[j][i]*0.99 > 0.2) {
                 previousCells[j][i] = currentCells[j][i]*0.99;
             } else {
                 previousCells[j][i] = currentCells[j][i];
@@ -93,7 +93,7 @@ function mouseDragged() {
     coordX = floor(mouseX / cellSize);
     coordY = floor(mouseY / cellSize);
     if(checkBounds(coordX, coordY)) {
-        currentCells[coordX][coordY] = 0.1;
+        currentCells[coordX][coordY] = 0.2;
     }
     loop();
 }
