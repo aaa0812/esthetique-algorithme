@@ -24,32 +24,33 @@ function draw() {
     background(255)
     for (let column = 0; column < nbCols; column++) {
         for (let row = 0; row < nbRows; row++) {
-            // Get cell value (0 or 1)
+            // Get cell value
             let cell = currentCells[column][row];
-            fill(50+ noise(cell * 250), cell * 30, 150+ cell * 250);
-            stroke(50+ noise(cell * 250), cell * 30, 150+cell * 250);
+            fill(50 + cell * 12, 20 + cell * 30, 127 + cell * 127);
+            stroke(50 + cell * 12, 20 + cell * 30, 127 + cell * 127);
             rect(column * cellSize, row * cellSize, cellSize, cellSize);
         }
     }
     nextCells = makeArray(nbCols, nbRows);
-    for (let i = 1; i < nbCols - 1; i++) {
-        for (let j = 1; j < nbRows - 1; j++) {
-            nextCells[i][j] =
-                (2 * currentCells[i][j] - previousCells[i][j]) +
+    for (let j = 1; j < nbCols - 1; j++) {
+        for (let i = 1; i < nbRows - 1; i++) {
+            nextCells[j][i] =
+                (2 * currentCells[j][i] - previousCells[j][i]) +
                 damping *
-                ((currentCells[i - 1][j] + currentCells[i + 1][j] + currentCells[i][j - 1] + currentCells[i][j + 1]) / 4 - currentCells[i][j]);
+                ((currentCells[j - 1][i] + currentCells[j + 1][i] + currentCells[j][i - 1] + currentCells[j][i + 1]) / 4 - currentCells[j][i]);
         }
     }
 
-    previousCells = currentCells;
+    for (let j = 0; j < nbCols; j++) {
+        for (let i = 0; i < nbRows; i++) {
+            if(currentCells[j][i]*0.99 > 0.8) {
+                previousCells[j][i] = currentCells[j][i]*0.99;
+            } else {
+                previousCells[j][i] = currentCells[j][i];
+            }
+        };
+    };
     currentCells = nextCells;
-}
-
-function mouseClicked() {
-    coordX = floor(mouseX / cellSize);
-    coordY = floor(mouseY / cellSize);
-    currentCells[coordX][coordY] = 1;
-    loop();
 }
 
 function makeArray(cols, rows) {
@@ -58,4 +59,22 @@ function makeArray(cols, rows) {
         arr[i] = new Array(rows).fill(0);
     }
     return arr;
+}
+
+function mouseClicked() {
+    coordX = floor(mouseX / cellSize);
+    coordY = floor(mouseY / cellSize);
+    if(coordX < width/cellSize && coordY < height/cellSize && coordY >= 0 && coordX >= 0) {
+        currentCells[coordX][coordY] = 1;
+    }
+    loop();
+}
+
+function mouseDragged() {
+    coordX = floor(mouseX / cellSize);
+    coordY = floor(mouseY / cellSize);
+    if(coordX < width/cellSize && coordY < height/cellSize && coordY >= 0 && coordX >= 0) {
+        currentCells[coordX][coordY] = 0.1;
+    }
+    loop();
 }
