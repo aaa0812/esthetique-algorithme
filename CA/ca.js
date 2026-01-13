@@ -64,7 +64,7 @@ function makeArray(cols, rows) {
 function mouseClicked() {
     coordX = floor(mouseX / cellSize);
     coordY = floor(mouseY / cellSize);
-    if(coordX < width/cellSize && coordY < height/cellSize && coordY >= 0 && coordX >= 0) {
+    if(checkBounds(coordX, coordY)) {
         currentCells[coordX][coordY] = 1;
     }
     loop();
@@ -73,8 +73,16 @@ function mouseClicked() {
 function mouseDragged() {
     coordX = floor(mouseX / cellSize);
     coordY = floor(mouseY / cellSize);
-    if(coordX < width/cellSize && coordY < height/cellSize && coordY >= 0 && coordX >= 0) {
+    if(checkBounds(coordX, coordY)) {
         currentCells[coordX][coordY] = 0.1;
     }
     loop();
+}
+
+function checkBounds(coordA, coordB) {
+    if(coordA < width/cellSize && coordB < height/cellSize && coordB >= 0 && coordA >= 0) {
+        return true;
+    } else {
+        return false
+    }
 }
