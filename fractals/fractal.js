@@ -1,45 +1,60 @@
 let angle;
+let color = 150; // variable to store color
+let i = 255; //
+let bgColor = 0;
+let sound;
+
+function preload() {
+    soundFormats('mp3', 'ogg');
+    sound = loadSound('hearthbeat.mp3');
+}
 
 function setup() {
     createCanvas(640, 640);
     colorMode(HSB);
     angleMode(DEGREES);
-    slider = createSlider(1, 14);
-    slider.size(width);
-    slider.position(6, height);
+    angle = 30;
+    background(0);
+    frameRate(60);
 }
 
 function draw() {
-    background(0);
-
-    angle = 30;
-
+    //si le background n'est pas noir, on diminue sa valeur grâce à la variable i
+    if(bgColor > 0) {
+        bgColor -= i*10;
+    }
+    background(bgColor);
+    i++;
+    
     // on se place au milieu de la fenêtre
     translate(width / 2, height / 2);
-
-    // Draw a line 120 pixels
+    
+    //fill with color
+    stroke(0, 250, color);
     strokeWeight(8);
-    stroke(0, 255, 255);
+    // on dessine une ligne de 42 pixels vers le haut
     line(0, 0, 0, -42);
 
+    //première récursion pour commencer les branches vers le bas
     branch(-42, 0);
-    // Move to the end of that line
+
+    // On se décale à la fin de la ligne
     translate(0, -42);
-    // Start the recursive branching
+    //récursion pour faire les branches vers le haut
     branch(42, 0);
 }
 
 function branch(h, level) {
 
+    stroke(0, 250, (color-level*10));
     strokeWeight(8 / level);
 
-    // limite à n récursions
-    if (level < slider.value()) {
+    // limite à n récursions, en fonction de la valeur du slider
+    if (level < 12) {
         // Draw the right branch
         // Save the current coordinate system
         push();
         //rotation
-
         rotate(angle);
         //on dessine la ligne / branche
         line(0, 0, 0, -h);
@@ -57,5 +72,14 @@ function branch(h, level) {
         translate(0, -h);
         branch(h, level + 1);
         pop();
+    } else {
+        //noLoop();
     }
+}
+
+function mousePressed() {
+    //loop();
+    bgColor = 255;
+    i = 0;
+    sound.play();
 }
