@@ -1,9 +1,12 @@
-let angle;
+let angle; //angle avec lequel les lignes se créent
 let color = 150; // variable to store color
-let i = 255; //
-let bgColor = 0;
-let sound;
+let i = 255; //indice pour compter les itérations de la fonction draw
+let bgColor = 0; //couleur du fond
+let sound; //variable qui contient le fichier audio
 
+/**
+ * chargement du fichier mp3 pour le lancer plus tard
+ */
 function preload() {
     soundFormats('mp3', 'ogg');
     sound = loadSound('hearthbeat.mp3');
@@ -24,6 +27,7 @@ function draw() {
         bgColor -= i*10;
     }
     background(bgColor);
+    //on incrémente la variable i, pour diminuer la couleur du background à l'itération suivante
     i++;
     
     // on se place au milieu de la fenêtre
@@ -51,19 +55,18 @@ function branch(h, level) {
 
     // limite à n récursions, en fonction de la valeur du slider
     if (level < 12) {
-        // Draw the right branch
-        // Save the current coordinate system
-        push();
-        //rotation
-        rotate(angle);
-        //on dessine la ligne / branche
-        line(0, 0, 0, -h);
-        //on se place à la fin de la branche
-        translate(0, -h);
-        // on rappelle branch de manière récursive
-        branch(h, level + 1);
-        // Restore the saved coordinate system
-        pop();
+        // Branche droite
+        push(); // on enregistre les coordonnées actuelles
+        
+        rotate(angle); //rotation de angle degrés
+        
+        line(0, 0, 0, -h); //on dessine la branche
+        
+        translate(0, -h); //on se place à la fin de la branche
+        
+        branch(h, level + 1); // on rappelle branch de manière récursive
+        
+        pop(); // on relâche les coordonnées
 
         // La même chose, pour la branche de gauche
         push();
@@ -72,14 +75,14 @@ function branch(h, level) {
         translate(0, -h);
         branch(h, level + 1);
         pop();
-    } else {
-        //noLoop();
     }
 }
 
 function mousePressed() {
-    //loop();
+    //le fond devient blanc lors d'un clic
     bgColor = 255;
+    //on passe le compteur à 0 pou pouvoir de nouveau l'incrémenter dans draw()
     i = 0;
+    //lancement du son de battement de coeur au clic
     sound.play();
 }
