@@ -1,3 +1,3 @@
-[librairie](github.com/Lartu/p5.clickable)
+[librairie image cliquable](github.com/Lartu/p5.clickable)
 
-https://editor.p5js.org/ks1439/sketches/-mWyF-C0G 
+[exemple image cliquable](https://editor.p5js.org/ks1439/sketches/-mWyF-C0G) 

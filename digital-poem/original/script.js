@@ -1,3 +1,29 @@
+const names = [
+    "Marie",
+    "John",
+    "Peter",
+    "Victor",
+    "Eve"
+]
+
+const times = [
+    "",
+    "",
+    "",
+    "",
+    "",
+]
+
+const places = [
+    "",
+    "",
+    "",
+    "",
+    "",
+]
+
+let victim;
+
 function preload() {
     board = loadImage('assets/board.jpg');
     stickyNoteImg = loadImage('assets/sticky-note.png');
@@ -15,6 +41,9 @@ function setup() {
     stickyNote3 = new ImageButton(stickyNoteImg, width / 2.5, height / 3, snWidth, snWidth);
     stickyNote4 = new ImageButton(stickyNoteImg, width / 6, height / 2, snWidth, snWidth);
     stickyNote5 = new ImageButton(stickyNoteImg, width / 1.3, height / 1.5, snWidth, snWidth);
+
+    pickVictim();
+    console.log(`*****${victim} est mort·e.*****`)
 }
 
 function draw() {
@@ -24,6 +53,16 @@ function draw() {
     stickyNote3.draw();
     stickyNote4.draw();
     stickyNote5.draw();
+}
+
+function generateSentence() {
+
+}
+
+function pickVictim() {
+    const i = Math.floor(Math.random() * 5);
+    victim = names[i];
+    names.splice(i, 1);
 }
 
 class ImageButton {
