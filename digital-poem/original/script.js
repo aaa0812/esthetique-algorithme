@@ -8,9 +8,11 @@
  * ------------- REGLES :
  * Le tueur est celui n'ayant pas d'alibi
  * Conditions :
- * - personne pour confirmer
+ * - personne pour confirmer + HATED
  * OU
- * - même endroit que la victime ET - mobile (relation = hate)
+ * - même endroit que la victime avant le meurtre ET - mobile (relation = hated)
+ * OU
+ * - même endroit PENDANT le meurtre + relation = did not know
  */
 
 const names = [
@@ -59,6 +61,7 @@ function setup() {
 
     pickVictim();
     console.log(`*****${victim.name} is dead.*****`);
+    pickKiller();
 
     stickyNote1 = new ImageButton(stickyNoteImg, 32, 32, snWidth, snWidth, `Victim : ${victim.name}`);
     stickyNote2 = new ImageButton(stickyNoteImg, width / 1.2, 52, snWidth, snWidth, ``);
@@ -94,7 +97,7 @@ function pickVictim() {
 
 function pickKiller() {
     const i = getRandomIndex(4);
-    killer = names[i];
+    killer = new Killer(names[i]);
 }
 
 function getRandomIndex(max) {
@@ -112,6 +115,34 @@ class Victim {
     }
 }
 
+class Killer {
+    name;
+    crimeScene;
+    time;
+    relationToVictim;
+    alibi;
+    constructor(name) {
+        this.name = name;
+
+        this.alibi = getRandomIndex(2) === 0 ? true : false; //une chance sur 2 que le tueur aie un alibi
+        if (!this.alibi) {
+            this.relationToVictim = 'HATED';
+        } else {
+            do {
+                this.relationToVictim = relation[getRandomIndex(3)];
+            } while (this.relationToVictim === "LOVED");
+            if (this.relationToVictim === "HATED") {
+                this.crimeScene = victim.crimeScene;
+                this.time = times[getRandomIndex(5)];
+            } else {
+                this.crimeScene = victim.crimeScene;
+                this.time = victim.timeOfCrime;
+            }
+        }
+    }
+
+}
+
 class ImageButton {
     title;
     text = '';
@@ -120,11 +151,11 @@ class ImageButton {
 
         this.btn = new Clickable();     //Create button
         this.btn.locate(coordx, coordy);
-        
+
         this.btn.onHover = () => {
             document.body.style.cursor = "pointer";
         }
-        
+
         this.btn.onOutside = () => {
             document.body.style.cursor = "default";
         }
