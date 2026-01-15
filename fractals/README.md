@@ -1,8 +1,8 @@
 # Atelier 3
 ## Présentation
-Ce projet présente des caractéristiques de fractale par sa récursivité / répétition. Il représente, de manière un peu abstraite, des vaisseaux sanguins. Lors d'un clic sur la fenêtre, un son de battement de coeur est lancé.
+Ce projet présente des caractéristiques de fractale par sa récursivité / répétition. Il représente, de manière un peu abstraite, des vaisseaux sanguins. Lors d'un clic sur la fenêtre, un son de battement de coeur est lancée et l'arrière plan devient blanc pendant quelques secondes.
 
-![capture d'écran](screenshots/image.png)
+<img src="fractals/screenshots/image.png" alt="" style="width:400px;"/>
 
 ## Exécution
 ### Local
