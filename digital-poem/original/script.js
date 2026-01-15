@@ -44,43 +44,46 @@ const relation = [
     "LOVED"
 ]
 
+let currentChar = 0;
+
 let victim;
 let killer;
 let suspects = [];
 let stickyNotes = [];
 
 function preload() {
-    board = loadImage('assets/board.jpg');
+    board = loadImage('assets/board.png');
     stickyNoteImg = loadImage('assets/sticky-note.png');
+    font = loadFont('assets/untold-history.ttf')
 }
 
 function setup() {
     createCanvas(1000, 740);
     frameRate(30);
-    background(220);
+    background(255);
     imageMode(CORNER);
+    textFont(font)
     let snWidth = width / 6;
     let posX = [
-        (width / 1.3),
-        (width / 6),
-        (width / 6),
-        (width/1.3)
+        (width / 1.3 - snWidth / 2),
+        (width / 6 - snWidth / 2),
+        (width / 6 - snWidth / 2),
+        (width / 1.3 - snWidth / 2)
     ];
 
     let posY = [
-        (height/4),
+        (height / 4),
         (height / 4),
         (height / 1.5),
-        (height/1.5)
+        (height / 1.5)
     ]
 
     pickVictim();
     pickKiller();
     generateSuspects();
-    suspects.splice(getRandomIndex(suspects.length+1), 0, killer); //ajoute le tueur à la liste de suspects, de manière aléatoire pour éviter qu'il soit toujours sur le même post-it
-    //suspects.forEach((e)=> console.log(e))
+    suspects.splice(getRandomIndex(suspects.length + 1), 0, killer); //ajoute le tueur à la liste de suspects, de manière aléatoire pour éviter qu'il soit toujours sur le même post-it
 
-    victimStickyNote = new StickyNote(stickyNoteImg, (width /2 - snWidth/2), 32, snWidth, snWidth, `Victim : ${victim.name}`);
+    victimStickyNote = new StickyNote(stickyNoteImg, (width / 2 - snWidth / 2), 42, snWidth, snWidth, `Victim : ${victim.name}`);
     victimStickyNote.setText(`Time of crime : ${victim.timeOfCrime}\nPlace : ${victim.crimeScene}`);
 
     //création d'un post-it par suspect
@@ -88,18 +91,21 @@ function setup() {
         let text = generateSentence(suspect.name, suspect.place, suspect.time, suspect.relationToVictim);
         let susStickyNote = new StickyNote(stickyNoteImg, posX[i], posY[i], snWidth, snWidth, suspect.name);
         susStickyNote.setText(text);
-        if(suspect.verifiedAlibi) {
+        if (suspect.verifiedAlibi) {
             let name;
             do {
                 name = names[getRandomIndex(names.length)];
-            } while(name === suspect.name)
-                susStickyNote.setAlibi(`${name} confirmed.`);
+            } while (name === suspect.name)
+            susStickyNote.setAlibi(`${name} confirmed.`);
         }
 
         stickyNotes.push(susStickyNote);
+        console.log(killer.name);
     })
 
-    console.log(`*****${victim.name} is dead.*****`);
+    textSize(64)
+    text(victim.name, width / 7, height / 6);
+    text(" is dead.", width / 1.5, height / 6);
 
 }
 
@@ -208,18 +214,18 @@ class StickyNote {
     verifiedAlibi = '';
     constructor(img, coordx, coordy, w, h, title) {
         this.title = title;
-
-        this.btn = new Clickable();     //Create button
+        
+        this.btn = new Clickable();
         this.btn.locate(coordx, coordy);
-
+        
         this.btn.onHover = () => {
             document.body.style.cursor = "pointer";
         }
-
+        
         this.btn.onOutside = () => {
             document.body.style.cursor = "default";
         }
-
+        
         this.btn.onPress = () => {
             this.write();
         }
@@ -232,23 +238,24 @@ class StickyNote {
         this.btn.color = "#00000000";
         this.btn.strokeWeight = 0;
     }
-
+    
     setText(text) {
         this.text = text;
     }
     setAlibi(alibi) {
         this.verifiedAlibi = alibi;
     }
-
+    
     draw() {
         this.btn.draw();
     }
-
+    
     write() {
-        console.log(this.title);
-        console.log(this.text);
-        if(this.verifiedAlibi !== '') {
-            console.log(this.verifiedAlibi);
-        }
+        let toDisplay = this.verifiedAlibi !== '' ? `${this.title}\n${this.text}\n${this.verifiedAlibi}` : `${this.title}\n${this.text}`;
+        rectMode(CENTER);
+        rect(width/2, height/2, 220,200)
+        textSize(16);
+        textAlign(CENTER, CENTER);
+        text(toDisplay, width/2, height/2, 200);
     }
 }
