@@ -46,7 +46,8 @@ const relation = [
 
 let victim;
 let killer;
-let innocents;
+let suspects = [];
+let stickyNotes = [];
 
 function preload() {
     board = loadImage('assets/board.jpg');
@@ -59,34 +60,58 @@ function setup() {
     background(220);
     imageMode(CORNER);
     let snWidth = width / 6;
+    let posX = [
+        (width / 1.3),
+        (width / 6),
+        (width / 6),
+        (width/1.3)
+    ];
+
+    let posY = [
+        (height/4),
+        (height / 4),
+        (height / 1.5),
+        (height/1.5)
+    ]
 
     pickVictim();
-    console.log(`*****${victim.name} is dead.*****`);
     pickKiller();
+    generateSuspects();
+    suspects.splice(getRandomIndex(suspects.length+1), 0, killer); //ajoute le tueur à la liste de suspects, de manière aléatoire pour éviter qu'il soit toujours sur le même post-it
+    //suspects.forEach((e)=> console.log(e))
 
-    stickyNote1 = new ImageButton(stickyNoteImg, 32, 32, snWidth, snWidth, `Victim : ${victim.name}`);
-    stickyNote2 = new ImageButton(stickyNoteImg, width / 1.2, 52, snWidth, snWidth, ``);
-    stickyNote3 = new ImageButton(stickyNoteImg, width / 2.5, height / 3, snWidth, snWidth);
-    stickyNote4 = new ImageButton(stickyNoteImg, width / 6, height / 2, snWidth, snWidth);
-    stickyNote5 = new ImageButton(stickyNoteImg, width / 1.3, height / 1.5, snWidth, snWidth);
+    victimStickyNote = new StickyNote(stickyNoteImg, (width /2 - snWidth/2), 32, snWidth, snWidth, `Victim : ${victim.name}`);
+    victimStickyNote.setText(`Time of crime : ${victim.timeOfCrime}\nPlace : ${victim.crimeScene}`);
 
-    stickyNote1.setText(`Time of crime : ${victim.timeOfCrime}\nPlace : ${victim.crimeScene}`);
+    //création d'un post-it par suspect
+    suspects.forEach((suspect, i) => {
+        let text = generateSentence(suspect.name, suspect.place, suspect.time);
+        let susStickyNote = new StickyNote(stickyNoteImg, posX[i], posY[i], snWidth, snWidth, suspect.name);
+        susStickyNote.setText(text);
+        if(suspect.verifiedAlibi) {
+            let name;
+            do {
+                name = names[getRandomIndex(names.length)];
+            } while(name === suspect.name)
+                susStickyNote.setAlibi(`${name} confirmed.`);
+        }
+
+        stickyNotes.push(susStickyNote);
+    })
+
+    console.log(`*****${victim.name} is dead.*****`);
 
 }
 
 function draw() {
     image(board, 0, 0, width, height);
-    stickyNote1.draw();
-    stickyNote2.draw();
-    stickyNote3.draw();
-    stickyNote4.draw();
-    stickyNote5.draw();
+    victimStickyNote.draw();
+    stickyNotes.forEach((note) => {
+        note.draw()
+    })
 }
 
-function generateSentence(name) {
-    const time = getRandomIndex(5);
-    const place = getRandomIndex(4);
-
+function generateSentence(name, place, time) {
     return `${name} was at ${place} at ${time}`;
 }
 
@@ -100,6 +125,13 @@ function pickKiller() {
     const i = getRandomIndex(4);
     killer = new Killer(names[i]);
     names.splice(i, 1);
+}
+
+function generateSuspects() {
+    names.forEach((name) => {
+        let sus = new Suspect(name);
+        suspects.push(sus);
+    })
 }
 
 function getRandomIndex(max) {
@@ -119,7 +151,7 @@ class Victim {
 
 class Killer {
     name;
-    crimeScene;
+    place;
     time;
     relationToVictim;
     verifiedAlibi;
@@ -131,17 +163,17 @@ class Killer {
             this.relationToVictim = 'HATED'; //si le tueur n'a personne pour confirmer son alibi, on marque qu'il détestait la victime
             this.time = victim.timeOfCrime;
             do {
-                this.crimeScene = places[getRandomIndex(4)];
-            } while(this.crimeScene === victim.crimeScene) //on veut que le tueur dise qu'il n'était pas sur les lieux du crime
+                this.place = places[getRandomIndex(4)];
+            } while (this.place === victim.crimeScene) //on veut que le tueur dise qu'il n'était pas sur les lieux du crime
         } else {
             do {
                 this.relationToVictim = relation[getRandomIndex(3)];
             } while (this.relationToVictim === "LOVED");
             if (this.relationToVictim === "HATED") {
-                this.crimeScene = victim.crimeScene;
+                this.place = victim.crimeScene;
                 this.time = times[getRandomIndex(5)];
             } else {
-                this.crimeScene = victim.crimeScene;
+                this.place = victim.crimeScene;
                 this.time = victim.timeOfCrime;
             }
         }
@@ -155,23 +187,24 @@ class Suspect {
     time;
     relationToVictim;
     verifiedAlibi;
-    constructor(name, time) {
+    constructor(name) {
         this.name = name;
-        this.time = time;
+        this.time = times[getRandomIndex(times.length)];
         this.verifiedAlibi = getRandomIndex(2) === 0 ? true : false;
-        if(this.verifiedAlibi) {
+        if (this.verifiedAlibi) {
             do {
                 this.place = places[getRandomIndex(places.length)];
-            } while(this.place === victim.crimeScene && this.time === victim.timeOfCrime)
+            } while (this.place === victim.crimeScene && this.time === victim.timeOfCrime)
         } else {
             this.place = places[getRandomIndex(places.length)];
         }
     }
 }
 
-class ImageButton {
+class StickyNote {
     title;
     text = '';
+    verifiedAlibi = '';
     constructor(img, coordx, coordy, w, h, title) {
         this.title = title;
 
@@ -202,6 +235,9 @@ class ImageButton {
     setText(text) {
         this.text = text;
     }
+    setAlibi(alibi) {
+        this.verifiedAlibi = alibi;
+    }
 
     draw() {
         this.btn.draw();
@@ -210,5 +246,8 @@ class ImageButton {
     write() {
         console.log(this.title);
         console.log(this.text);
+        if(this.verifiedAlibi !== '') {
+            console.log(this.verifiedAlibi);
+        }
     }
 }
