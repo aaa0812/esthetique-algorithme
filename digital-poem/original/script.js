@@ -46,6 +46,7 @@ const relation = [
 
 let victim;
 let killer;
+let innocents;
 
 function preload() {
     board = loadImage('assets/board.jpg');
@@ -98,6 +99,7 @@ function pickVictim() {
 function pickKiller() {
     const i = getRandomIndex(4);
     killer = new Killer(names[i]);
+    names.splice(i, 1);
 }
 
 function getRandomIndex(max) {
@@ -120,12 +122,12 @@ class Killer {
     crimeScene;
     time;
     relationToVictim;
-    alibi;
+    verifiedAlibi;
     constructor(name) {
         this.name = name;
 
-        this.alibi = getRandomIndex(2) === 0 ? true : false; //une chance sur 2 que le tueur aie un alibi
-        if (!this.alibi) {
+        this.verifiedAlibi = getRandomIndex(2) === 0 ? true : false; //une chance sur 2 que le tueur aie un alibi
+        if (!this.verifiedAlibi) {
             this.relationToVictim = 'HATED'; //si le tueur n'a personne pour confirmer son alibi, on marque qu'il détestait la victime
             this.time = victim.timeOfCrime;
             do {
@@ -145,6 +147,26 @@ class Killer {
         }
     }
 
+}
+
+class Suspect {
+    name;
+    place;
+    time;
+    relationToVictim;
+    verifiedAlibi;
+    constructor(name, time) {
+        this.name = name;
+        this.time = time;
+        this.verifiedAlibi = getRandomIndex(2) === 0 ? true : false;
+        if(this.verifiedAlibi) {
+            do {
+                this.place = places[getRandomIndex(places.length)];
+            } while(this.place === victim.crimeScene && this.time === victim.timeOfCrime)
+        } else {
+            this.place = places[getRandomIndex(places.length)];
+        }
+    }
 }
 
 class ImageButton {
