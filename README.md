@@ -34,6 +34,9 @@ Ce projet présente des caractéristiques de fractale par sa récursivité / ré
 <img src="fractals/screenshots/image.png" alt="" style="width:200px;"/>
 
 ## Exécution
-### Éditeur
-Pour lancer le projet, récupérer le contenu de fractal.js, le coller dans [l'éditeur en ligne p5.js](https://editor.p5js.org/) et lancer le programme.
+### Local
+La présence de fichiers audios nécessite d'utiliser un serveur pour lancer le projet.
+Télecharger le dossier "fractals", et l'ouvrir avec VSCode. VSCode possède un petit serveur : faire un clic droit dans le fichier index.html, l'option "open with live server" devrait apparaître. Sinon, télecharger l'extension Live server sur VSCode.
+<img src="/launch-instructions/menu.png" alt="" style="width:600px;"/>
+<img src="/launch-instructions/live-server.png" alt="" style="width:600px;"/>
 
