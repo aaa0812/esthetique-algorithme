@@ -126,7 +126,11 @@ class Killer {
 
         this.alibi = getRandomIndex(2) === 0 ? true : false; //une chance sur 2 que le tueur aie un alibi
         if (!this.alibi) {
-            this.relationToVictim = 'HATED';
+            this.relationToVictim = 'HATED'; //si le tueur n'a personne pour confirmer son alibi, on marque qu'il détestait la victime
+            this.time = victim.timeOfCrime;
+            do {
+                this.crimeScene = places[getRandomIndex(4)];
+            } while(this.crimeScene === victim.crimeScene) //on veut que le tueur dise qu'il n'était pas sur les lieux du crime
         } else {
             do {
                 this.relationToVictim = relation[getRandomIndex(3)];
