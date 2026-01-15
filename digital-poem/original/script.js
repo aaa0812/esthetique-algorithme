@@ -85,7 +85,7 @@ function setup() {
 
     //création d'un post-it par suspect
     suspects.forEach((suspect, i) => {
-        let text = generateSentence(suspect.name, suspect.place, suspect.time);
+        let text = generateSentence(suspect.name, suspect.place, suspect.time, suspect.relationToVictim);
         let susStickyNote = new StickyNote(stickyNoteImg, posX[i], posY[i], snWidth, snWidth, suspect.name);
         susStickyNote.setText(text);
         if(suspect.verifiedAlibi) {
@@ -111,8 +111,8 @@ function draw() {
     })
 }
 
-function generateSentence(name, place, time) {
-    return `${name} was at ${place} at ${time}`;
+function generateSentence(name, place, time, relation) {
+    return `${name} ${relation} the victim. \n${name} was at ${place} at ${time}`;
 }
 
 function pickVictim() {
@@ -190,6 +190,7 @@ class Suspect {
     constructor(name) {
         this.name = name;
         this.time = times[getRandomIndex(times.length)];
+        this.relationToVictim = relation[getRandomIndex(relation.length)]
         this.verifiedAlibi = getRandomIndex(2) === 0 ? true : false;
         if (this.verifiedAlibi) {
             do {
