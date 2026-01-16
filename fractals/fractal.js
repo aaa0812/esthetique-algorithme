@@ -23,16 +23,23 @@ function setup() {
 
 function draw() {
     //si le background n'est pas noir, on diminue sa valeur grâce à la variable i
-    if(bgColor > 0) {
-        bgColor -= i*10;
+    if (bgColor > 0) {
+        bgColor -= i * 0.1;
+    } else {
+        //le fond devient blanc
+        bgColor = 100;
+        //on passe le compteur à 0 pou pouvoir de nouveau l'incrémenter
+        i = 0;
+        //lancement du son de battement de coeur au flash
+        sound.play();
     }
-    background(bgColor);
+    background(0, 0 ,bgColor);
     //on incrémente la variable i, pour diminuer la couleur du background à l'itération suivante
     i++;
-    
+
     // on se place au milieu de la fenêtre
     translate(width / 2, height / 2);
-    
+
     //fill with color
     stroke(0, 250, color);
     strokeWeight(8);
@@ -50,22 +57,22 @@ function draw() {
 
 function branch(h, level) {
 
-    stroke(0, 250, (color-level*10));
+    stroke(0, 250, (color - level * 10));
     strokeWeight(8 / level);
 
     // limite à n récursions, en fonction de la valeur du slider
     if (level < 12) {
         // Branche droite
         push(); // on enregistre les coordonnées actuelles
-        
+
         rotate(angle); //rotation de angle degrés
-        
+
         line(0, 0, 0, -h); //on dessine la branche
-        
+
         translate(0, -h); //on se place à la fin de la branche
-        
+
         branch(h, level + 1); // on rappelle branch de manière récursive
-        
+
         pop(); // on relâche les coordonnées
 
         // La même chose, pour la branche de gauche
@@ -76,13 +83,4 @@ function branch(h, level) {
         branch(h, level + 1);
         pop();
     }
-}
-
-function mousePressed() {
-    //le fond devient blanc lors d'un clic
-    bgColor = 255;
-    //on passe le compteur à 0 pou pouvoir de nouveau l'incrémenter dans draw()
-    i = 0;
-    //lancement du son de battement de coeur au clic
-    sound.play();
 }
