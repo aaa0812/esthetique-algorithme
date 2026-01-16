@@ -225,6 +225,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6992990953581375590}
+  - component: {fileID: -9075632222679258987}
   m_Layer: 0
   m_Name: hallChunk
   m_TagString: Untagged
@@ -251,6 +252,21 @@ Transform:
   - {fileID: 4169631033693645308}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-9075632222679258987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7983523233610650840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 183a369a92ec06c4eb58c584dedd2a03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 0.001
+  spawnDistance: 9.99
+  chunk: {fileID: 7983523233610650840}
 --- !u!1 &9018599631684239341
 GameObject:
   m_ObjectHideFlags: 0
