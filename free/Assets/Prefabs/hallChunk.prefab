@@ -265,7 +265,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0.001
-  spawnDistance: 9.99
+  spawnDistance: 8
   chunk: {fileID: 7983523233610650840}
 --- !u!1 &9018599631684239341
 GameObject:

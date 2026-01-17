@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,20 +11,16 @@ public class Chunk : MonoBehaviour
     public float spawnDistance;
     public GameObject chunk;
     private bool hasChild = false;
-    private Vector3 displacement;
     private float time = 2f;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         forward = InputSystem.actions.FindAction("Navigate/Forward");
-        displacement = new Vector3(0, 0, -7);
-
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (forward.IsPressed())
+        if (forward.triggered)
         {
             StartCoroutine(MoveForward());
         }
